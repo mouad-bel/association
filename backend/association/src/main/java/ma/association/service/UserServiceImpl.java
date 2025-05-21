@@ -34,6 +34,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity<String> newUser(User newUser) {
 
+        
         if(userRepository.existsByEmail(newUser.getEmail()) ){
             ResponseEntity.badRequest().body("Email already exists");
         }
