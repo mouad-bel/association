@@ -18,26 +18,26 @@ public class CommentaireController {
 
     // ------------------ EVENT COMMENTS ------------------
 
-    @GetMapping("/evenements/{evenementId}/commentaires")
-    public ResponseEntity<List<Commentaires>> getCommentairesForEvent(@PathVariable Long evenementId) {
-        List<Commentaires> commentaires = commentaireService.getCommentairesForEvent(evenementId);
+    @GetMapping("/post/{postId}/commentaires")
+    public ResponseEntity<List<Commentaires>> getCommentairesForPost(@PathVariable Long postId) {
+        List<Commentaires> commentaires = commentaireService.getCommentairesForPost(postId);
         return ResponseEntity.ok(commentaires);
     }
 
-    @PostMapping("/evenements/{evenementId}/commentaires")
-    public ResponseEntity<Commentaires> addCommentaireToEvent(@PathVariable Long evenementId,
+    @PostMapping("/Post/{postId}/commentaires")
+    public ResponseEntity<Commentaires> addCommentaireToPost(@PathVariable Long postId,
                                                               @RequestBody Commentaires commentaire) {
-        Commentaires saved = commentaireService.addCommentaireToEvent(evenementId, commentaire);
+        Commentaires saved = commentaireService.addCommentaireToPost(postId, commentaire);
         if (saved == null) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(saved);
     }
 
-    @DeleteMapping("/evenements/{evenementId}/commentaires/{commentaireId}")
-    public ResponseEntity<Void> deleteCommentaireFromEvent(@PathVariable Long evenementId,
+    @DeleteMapping("/Post/{postId}/commentaires/{commentaireId}")
+    public ResponseEntity<Void> deleteCommentaireFromPost(@PathVariable Long postId,
                                                            @PathVariable Long commentaireId) {
-        boolean deleted = commentaireService.deleteCommentaireFromEvent(evenementId, commentaireId);
+        boolean deleted = commentaireService.deleteCommentaireFromPost(postId, commentaireId);
         return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
 

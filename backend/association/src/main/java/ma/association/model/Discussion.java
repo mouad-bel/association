@@ -26,7 +26,7 @@ public class Discussion {
 
     @ManyToOne
     @JoinColumn(name = "userId")
-    @JsonIgnoreProperties({"evenements", "commentaires", "discussions"})
+    @JsonIgnoreProperties({"posts", "commentaires", "discussions"})
     private User user;
 
     @OneToMany(mappedBy = "discussion", cascade = CascadeType.ALL, orphanRemoval = true)

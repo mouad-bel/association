@@ -1,6 +1,5 @@
 package ma.association.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
@@ -18,9 +17,9 @@ public class Commentaires {
     private Long id;
     private String contenu;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="evenementId")
+    @JoinColumn(name="postId")
     @JsonIgnore
-    private Evenement evenement;
+    private Post post;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class EvenementResponseDTO {
+public class PostResponseDTO {
     private Long id;
     private String titre;
     private String description;

@@ -2,11 +2,10 @@ package ma.association.service;
 
 import ma.association.model.Commentaires;
 import ma.association.model.Discussion;
-import ma.association.model.Evenement;
-import ma.association.model.User;
+import ma.association.model.Post;
 import ma.association.repository.CommentaireRepository;
 import ma.association.repository.DiscussionRepository;
-import ma.association.repository.EvenementRepository;
+import ma.association.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,21 +17,21 @@ public class CommentaireService {
     @Autowired
     private CommentaireRepository commentaireRepository;
     @Autowired
-    private EvenementRepository evenementRepository;
+    private PostRepository postRepository;
     @Autowired
     private DiscussionRepository discussionRepository;
 
 
-    public List<Commentaires> getCommentairesForEvent(Long evenementId) {
-        return commentaireRepository.findByEvenementId(evenementId);
+    public List<Commentaires> getCommentairesForPost(Long postId) {
+        return commentaireRepository.findByPostId(postId);
     }
 
 
-    public Commentaires addCommentaireToEvent(Long evenementId, Commentaires commentaire) {
-        Evenement evenement = evenementRepository.findById(evenementId).orElse(null);
-        if (evenement == null) return null;
+    public Commentaires addCommentaireToPost(Long postId, Commentaires commentaire) {
+        Post post = postRepository.findById(postId).orElse(null);
+        if (post == null) return null;
 
-        commentaire.setEvenement(evenement);
+        commentaire.setPost(post);
         commentaire.setDiscussion(null);
         return commentaireRepository.save(commentaire);
     }
@@ -45,7 +44,7 @@ public class CommentaireService {
         if (discussion == null) return null;
 
         commentaire.setDiscussion(discussion);
-        commentaire.setEvenement(null); // ensure not attached to event
+        commentaire.setPost(null); // ensure not attached to event
         return commentaireRepository.save(commentaire);
     }
     public boolean deleteCommentaireFromDiscussion(Long discussionId, Long commentaireId) {
@@ -59,12 +58,12 @@ public class CommentaireService {
     }
 
 
-    public boolean deleteCommentaireFromEvent(Long evenementId, Long commentaireId) {
-        Evenement evenement = evenementRepository.findById(evenementId).orElse(null);
-        if (evenement == null) return false;
+    public boolean deleteCommentaireFromPost(Long postId, Long commentaireId) {
+        Post post = postRepository.findById(postId).orElse(null);
+        if (post == null) return false;
 
         Commentaires commentaire = commentaireRepository.findById(commentaireId).orElse(null);
-        if (commentaire == null || !commentaire.getEvenement().getId().equals(evenementId)) {
+        if (commentaire == null || !commentaire.getPost().getId().equals(postId)) {
             return false;
         }
 

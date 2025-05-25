@@ -19,7 +19,7 @@ public class Like {
     private User user;
 
     @ManyToOne
-    private Evenement evenement;
+    private Post post;
 
     private LocalDateTime likedAt = LocalDateTime.now();
 }
