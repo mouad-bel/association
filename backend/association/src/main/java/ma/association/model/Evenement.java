@@ -1,5 +1,6 @@
 package ma.association.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -31,5 +32,9 @@ public class Evenement {
     @JoinColumn(name = "userId")
     @JsonIgnoreProperties({"evenements", "commentaires", "discussions"})
     private User user;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "evenement", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Like> likes = new ArrayList<>();
 
 }

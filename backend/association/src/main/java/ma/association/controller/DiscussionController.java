@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/discussions")
-@CrossOrigin("http://localhost:5173")
+@CrossOrigin("http://localhost:5174")
 public class DiscussionController {
 
     @Autowired

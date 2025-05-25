@@ -6,6 +6,7 @@ import ma.association.DTO.UserDTO;
 import ma.association.model.Evenement;
 import ma.association.model.User;
 import ma.association.service.EvenementService;
+import ma.association.service.LikeService;
 import ma.association.service.UserService;
 import ma.association.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,14 +24,18 @@ import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.UUID;
 
+import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
+
 @RestController
 @RequestMapping("api/evenements")
-@CrossOrigin("http://localhost:5173")
+@CrossOrigin("http://localhost:5174")
 public class EvenementController {
     @Autowired
     private EvenementService evenementService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private LikeService likeService;
 
     @GetMapping("/events")
     public ResponseEntity<List<EvenementResponseDTO>> getAllEvenements() {
@@ -39,14 +44,16 @@ public class EvenementController {
         List<EvenementResponseDTO> responseDTOs = evenements.stream().map(ev -> {
             User user = ev.getUser();
             UserDTO userDTO = new UserDTO(user.getId(), user.getEmail(), user.getFirstName(),user.getPhone(),user.getLastName());
-
+            long likeCount = likeService.getLikeCount(ev);
             return new EvenementResponseDTO(
                     ev.getId(),
                     ev.getTitre(),
                     ev.getDescription(),
                     ev.getDate(),
                     ev.getPieceJoint(),
-                    userDTO
+                       likeCount,
+                       userDTO
+
             );
         }).toList();
 
@@ -106,6 +113,21 @@ public class EvenementController {
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+
+    }
+    @PostMapping("/{id}/like")
+    public ResponseEntity<String> likeOrUnlikeEvent(@PathVariable Long id, @RequestParam Long userId) {
+        Evenement evenement = evenementService.getEvenementById(id);
+        User user = userService.getUserById(userId); // You can adapt based on your logic
+
+        boolean liked = likeService.toggleLike(user, evenement);
+        return ResponseEntity.ok(liked ? "Event liked" : "Event unliked");
+    }
+    @GetMapping("/{id}/likes/count")
+    public ResponseEntity<Long> getLikesCount(@PathVariable Long id) {
+        Evenement evenement = evenementService.getEvenementById(id);
+        long count = likeService.getLikeCount(evenement);
+        return ResponseEntity.ok(count);
     }
 
 }

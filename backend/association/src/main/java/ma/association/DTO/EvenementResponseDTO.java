@@ -15,5 +15,7 @@ public class EvenementResponseDTO {
     private String description;
     private LocalDateTime date;
     private String pieceJoint;
+    private Long LikesCount;
     private UserDTO user;
+
 }
